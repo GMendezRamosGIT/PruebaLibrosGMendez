@@ -50,5 +50,43 @@ namespace BL
             }
             return result;
         }
+        public static ML.Result GetById(int IdLibro)
+        {
+            ML.Result result = new ML.Result();
+            try
+            {
+                using (DL.PruebaLibrosEntities context = new DL.PruebaLibrosEntities())
+                {
+                    var registro = context.LibroGetById(IdLibro).SingleOrDefault();
+
+                    if (registro != null)
+                    {
+                        ML.Libro libro = new ML.Libro();
+                        libro.IdLibro = registro.IdLibro;
+                        libro.Titulo = registro.Titulo;
+                        libro.Autor = new ML.Autor();
+                        libro.Autor.Nombre = registro.Autor;
+                        libro.AñoPublicacion = registro.AñoPublicacion;
+                        libro.Editorial = new ML.Editorial();
+                        libro.Editorial.Nombre = registro.Editorial;
+
+                        result.Object = libro;
+                        result.Correct = true;
+                    }
+                    else
+                    {
+                        result.Correct = false;
+                        result.ErrorMessage = "No se encontro el registro.";
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                result.Correct = false;
+                result.ErrorMessage = ex.Message;
+                result.Ex = ex;
+            }
+            return result;
+        }
     }
 }

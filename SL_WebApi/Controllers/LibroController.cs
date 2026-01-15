@@ -25,5 +25,19 @@ namespace SL_WebApi.Controllers
                 return Content(HttpStatusCode.NotFound, result.ErrorMessage);
             }
         }
+        [HttpGet]
+        [Route("GetById/{IdLibro}")]
+        public IHttpActionResult GetById(int IdLibro)
+        {
+            ML.Result result = BL.Libro.GetById(IdLibro);
+            if (result.Correct)
+            {
+                return Ok(result.Object);
+            }
+            else
+            {
+                return Content(HttpStatusCode.NotFound, result.ErrorMessage);
+            }
+        }
     }
 }
