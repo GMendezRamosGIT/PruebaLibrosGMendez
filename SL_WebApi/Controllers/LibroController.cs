@@ -1,0 +1,29 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Web.Http;
+
+namespace SL_WebApi.Controllers
+{
+    [RoutePrefix("api/libro")]
+    public class LibroController : ApiController
+    {
+        [HttpGet]
+        [Route("GetAll")]
+        public IHttpActionResult GetAll([FromBody]ML.Libro libroBusqueda)
+        {
+            libroBusqueda = libroBusqueda ?? new ML.Libro();
+            ML.Result result = BL.Libro.GetAll(libroBusqueda);
+            if (result.Correct)
+            {
+                return Ok(result.Objects);
+            }
+            else
+            {
+                return Content(HttpStatusCode.NotFound, result.ErrorMessage);
+            }
+        }
+    }
+}
