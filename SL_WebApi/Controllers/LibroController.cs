@@ -39,5 +39,19 @@ namespace SL_WebApi.Controllers
                 return Content(HttpStatusCode.NotFound, result.ErrorMessage);
             }
         }
+        [HttpPost]
+        [Route("Add")]
+        public IHttpActionResult Add([FromBody] ML.Libro libro)
+        {
+            ML.Result result = BL.Libro.Add(libro);
+            if (result.Correct)
+            {
+                return Ok(result);
+            }
+            else
+            {
+                return Content(HttpStatusCode.BadRequest, result.ErrorMessage);
+            }
+        }
     }
 }

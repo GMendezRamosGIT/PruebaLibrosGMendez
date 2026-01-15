@@ -88,5 +88,33 @@ namespace BL
             }
             return result;
         }
+        public static ML.Result Add(ML.Libro libro)
+        {
+            ML.Result result = new ML.Result();
+            try
+            {
+                using (DL.PruebaLibrosEntities context = new DL.PruebaLibrosEntities())
+                {
+                    var filasAfectadas = context.LibroAdd(libro.Titulo, libro.Autor.IdAutor, libro.AñoPublicacion, libro.Editorial.IdEditorial);
+
+                    if (filasAfectadas > 0)
+                    {
+                        result.Correct = true;
+                    }
+                    else
+                    {
+                        result.Correct = false;
+                        result.ErrorMessage = "No se pudo agrega el libro.";
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                result.Correct = false;
+                result.ErrorMessage = ex.Message;
+                result.Ex = ex;
+            }
+            return result;
+        }
     }
 }
