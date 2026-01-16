@@ -96,5 +96,14 @@ namespace SL_WebApi.Controllers
                 return Content(HttpStatusCode.BadRequest, result.ErrorMessage);
             }
         }
+        [AcceptVerbs("OPTIONS")]
+        [Route("{*any}")]
+        public HttpResponseMessage Options()
+        {
+            var response = new HttpResponseMessage(HttpStatusCode.OK);
+            response.Headers.Add("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+            response.Headers.Add("Access-Control-Allow-Headers", "Content-Type, Accept");
+            return response;
+        }
     }
 }
