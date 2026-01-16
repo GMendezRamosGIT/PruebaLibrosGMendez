@@ -68,5 +68,19 @@ namespace SL_WebApi.Controllers
                 return Content(HttpStatusCode.BadRequest, result.ErrorMessage);
             }
         }
+        [HttpDelete]
+        [Route("DeleteLibroByIdEditorial/{IdEditorial}")]
+        public IHttpActionResult DeleteLibroByIdEditorial(int IdEditorial)
+        {
+            ML.Result result = BL.Libro.DeleteLibroByEditorial(IdEditorial);
+            if (result.Correct)
+            {
+                return Ok(result);
+            }
+            else
+            {
+                return Content(HttpStatusCode.BadRequest, result.ErrorMessage);
+            }
+        }
     }
 }
