@@ -82,5 +82,19 @@ namespace SL_WebApi.Controllers
                 return Content(HttpStatusCode.BadRequest, result.ErrorMessage);
             }
         }
+        [HttpPut]
+        [Route("Update")]
+        public IHttpActionResult Update([FromBody] ML.Libro libro)
+        {
+            ML.Result result = BL.Libro.Update(libro);
+            if (result.Correct)
+            {
+                return Ok(result);
+            }
+            else
+            {
+                return Content(HttpStatusCode.BadRequest, result.ErrorMessage);
+            }
+        }
     }
 }
