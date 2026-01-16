@@ -124,5 +124,15 @@ namespace DL
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("LibroUpdate", idLibroParameter, tituloParameter, idAutorParameter, añoPublicacionParameter, idEditorialParameter);
         }
+    
+        public virtual ObjectResult<AutorGetAll_Result> AutorGetAll()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<AutorGetAll_Result>("AutorGetAll");
+        }
+    
+        public virtual ObjectResult<EditorialGetAll_Result> EditorialGetAll()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<EditorialGetAll_Result>("EditorialGetAll");
+        }
     }
 }

@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="PruebaLibrosModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="PruebaLibrosModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Autor">
           <Key>
             <PropertyRef Name="IdAutor" />
@@ -53,6 +53,8 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Function Name="AutorGetAll" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="EditorialGetAll" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="LibroAdd" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Titulo" Type="varchar" Mode="In" />
           <Parameter Name="IdAutor" Type="int" Mode="In" />
@@ -94,8 +96,7 @@
             <End Role="Libro" EntitySet="Libro" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="PruebaLibrosModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -170,10 +171,10 @@
             <Parameter Name="IdEditorial" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="LibroDeleteByAutor">
-            <Parameter Name="IdAutor" Mode="In" Type="Int32" />
+          <Parameter Name="IdAutor" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="LibroDeleteByEditorial">
-            <Parameter Name="IdEditorial" Mode="In" Type="Int32" />
+          <Parameter Name="IdEditorial" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="LibroGetAll" ReturnType="Collection(PruebaLibrosModel.LibroGetAll_Result)">
             <Parameter Name="IdAutor" Mode="In" Type="Int32" />
@@ -182,7 +183,7 @@
             <Parameter Name="AñoPublicacion" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="LibroGetById" ReturnType="Collection(PruebaLibrosModel.LibroGetById_Result)">
-            <Parameter Name="IdLibro" Mode="In" Type="Int32" />
+          <Parameter Name="IdLibro" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="LibroUpdate">
             <Parameter Name="IdLibro" Mode="In" Type="Int32" />
@@ -191,6 +192,8 @@
             <Parameter Name="AñoPublicacion" Mode="In" Type="Int32" />
             <Parameter Name="IdEditorial" Mode="In" Type="Int32" />
           </FunctionImport>
+          <FunctionImport Name="AutorGetAll" ReturnType="Collection(PruebaLibrosModel.AutorGetAll_Result)" />
+          <FunctionImport Name="EditorialGetAll" ReturnType="Collection(PruebaLibrosModel.EditorialGetAll_Result)" />
         </EntityContainer>
         <ComplexType Name="LibroGetAll_Result">
           <Property Type="Int32" Name="IdLibro" Nullable="false" />
@@ -205,6 +208,14 @@
           <Property Type="String" Name="Autor" Nullable="false" MaxLength="20" />
           <Property Type="Int32" Name="AñoPublicacion" Nullable="false" />
           <Property Type="String" Name="Editorial" Nullable="false" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="AutorGetAll_Result">
+          <Property Type="Int32" Name="IdAutor" Nullable="false" />
+          <Property Type="String" Name="Nombre" Nullable="false" MaxLength="20" />
+        </ComplexType>
+        <ComplexType Name="EditorialGetAll_Result">
+          <Property Type="Int32" Name="IdEditorial" Nullable="false" />
+          <Property Type="String" Name="Nombre" Nullable="false" MaxLength="50" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -265,6 +276,22 @@
             </ResultMapping>
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="LibroUpdate" FunctionName="PruebaLibrosModel.Store.LibroUpdate" />
+          <FunctionImportMapping FunctionImportName="AutorGetAll" FunctionName="PruebaLibrosModel.Store.AutorGetAll">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="PruebaLibrosModel.AutorGetAll_Result">
+                <ScalarProperty Name="IdAutor" ColumnName="IdAutor" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="EditorialGetAll" FunctionName="PruebaLibrosModel.Store.EditorialGetAll">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="PruebaLibrosModel.EditorialGetAll_Result">
+                <ScalarProperty Name="IdEditorial" ColumnName="IdEditorial" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

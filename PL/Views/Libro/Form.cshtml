@@ -1,0 +1,110 @@
+﻿@model ML.Libro
+@{
+    ViewBag.Title = "Form";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Agregar nuevo libro</h2>
+
+<body>
+    <div class="container">
+        @using (Html.BeginForm("Form", "Libro", FormMethod.Post, new { @onsubmit = "ValidarForm(this)" }))
+        {
+            @Html.HiddenFor(model => model.IdLibro)
+            <div class="row">
+                <div class="col-3">
+                    @Html.LabelFor(model => model.Titulo, new { @class = "form-label" })
+                    @Html.TextBoxFor(model => model.Titulo, new { @class = "form-control", onkeypress = "ValidarTitulo(this)" })
+                    @Html.ValidationMessageFor(model => model.Titulo, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="col-3">
+                    @Html.LabelFor(model => model.AñoPublicacion, "Año de publicación", new { @class = "form-label" })
+                    @Html.TextBoxFor(model => model.AñoPublicacion, new { @class = "form-control", onkeypress = "SoloNumeros(this)" })
+                    @Html.ValidationMessageFor(model => model.AñoPublicacion, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="col-3">
+                    @Html.LabelFor(model => model.Autor.IdAutor, "Autor", new { @class = "form-label" })
+                    @Html.DropDownListFor(model => model.Autor.IdAutor, new SelectList(Model.Autor.Autores, "IdAutor", "Nombre"), "Seleccione un autor", new { @class = "form-select" })
+                    @Html.ValidationMessageFor(model => model.Autor.IdAutor, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="col-3">
+                    @Html.LabelFor(model => model.Editorial.IdEditorial, "Editorial", new { @class = "form-label" })
+                    @Html.DropDownListFor(model => model.Editorial.IdEditorial, new SelectList(Model.Editorial.Editoriales, "IdEditorial", "Nombre"), "Seleccione una editorial", new { @class = "form-select" })
+                    @Html.ValidationMessageFor(model => model.Editorial.IdEditorial, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="row mt-3">
+                <div class="col-3 text-start">
+                    <button type="submit" class="btn btn-success">Registrar</button>
+                </div>
+            </div>
+        }
+    </div>
+</body>
+
+<script src="~/Scripts/jquery-3.7.0.js"></script>
+<script>
+    function ValidarForm() {
+        let isValid = true;
+        const etiquetas = $('[data-val-required]');
+
+        etiquetas.each(function () {
+            const etiqueta = $(this);
+
+            if (etiqueta.val() === "" || etiqueta.val() === null) {
+                etiqueta.addClass("is-invalid");
+                isValid = false;
+            }
+            else {
+                etiqueta.removeClass("is-invalid");
+            }
+        })
+        if (!isValid) {
+            event.preventDefault();
+            alert("Por favor, llena los campos obligatorios del formulario");
+        }
+    }
+    function SoloNumeros(input) {
+        var string = String.fromCharCode(!event.charCode ? event.which : event.charCode);
+        var regex = new RegExp(/^[0-9]{1,10}$/);
+
+        let padre = $(input).closest('div')
+
+        if (regex.test(string)) {
+            $(input).removeClass("is-invalid")
+            $(input).addClass("is-valid")
+
+            return true;
+        }
+        else {
+            $(input).removeClass("is-valid")
+            $(input).addClass("is-invalid")
+
+            event.preventDefault();
+            return false;
+        }
+    }
+    function ValidarTitulo(input){
+        var string = String.fromCharCode(!event.charCode ? event.which : event.charCode);
+        var regex = /^.$/;
+
+        let padre = $(input).closest('div')
+
+        if (regex.test(string)) {
+            $(input).removeClass("is-invalid")
+            $(input).addClass("is-valid")
+
+            return true;
+        }
+        else {
+            $(input).removeClass("is-valid")
+            $(input).addClass("is-invalid")
+
+            event.preventDefault();
+            return false;
+        }
+    }
+</script>
