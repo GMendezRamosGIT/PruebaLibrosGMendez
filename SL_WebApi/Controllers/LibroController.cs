@@ -13,13 +13,13 @@ namespace SL_WebApi.Controllers
     {
         [HttpGet]
         [Route("GetAll")]
-        public IHttpActionResult GetAll([FromBody]ML.Libro libroBusqueda)
+        public IHttpActionResult GetAll([FromUri]ML.Libro libroBusqueda)
         {
             libroBusqueda = libroBusqueda ?? new ML.Libro();
             ML.Result result = BL.Libro.GetAll(libroBusqueda);
             if (result.Correct)
             {
-                return Ok(result.Objects);
+                return Ok(result);
             }
             else
             {
@@ -33,7 +33,7 @@ namespace SL_WebApi.Controllers
             ML.Result result = BL.Libro.GetById(IdLibro);
             if (result.Correct)
             {
-                return Ok(result.Object);
+                return Ok(result);
             }
             else
             {

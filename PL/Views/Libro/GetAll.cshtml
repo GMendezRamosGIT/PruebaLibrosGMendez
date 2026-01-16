@@ -1,0 +1,46 @@
+﻿@model ML.Libro
+@{
+    ViewBag.Title = "GetAll";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Libros</h2>
+
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="table-responsive col-12">
+                @if (Model.Libros.Count > 0)
+                {
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Titulo</th>
+                                <th>Autor</th>
+                                <th>Año de publicacion</th>
+                                <th>Editorial</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (ML.Libro libro in Model.Libros)
+                            {
+                                <tr>
+                                    <td>@libro.Titulo</td>
+                                    <td>@libro.Autor.Nombre</td>
+                                    <td>@libro.AñoPublicacion</td>
+                                    <td>@libro.Editorial.Nombre</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+                else
+                {
+                    <div class="alert alert-info" role="alert">
+                        No se encontraron libros.
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</body>
