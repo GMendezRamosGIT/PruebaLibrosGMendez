@@ -14,6 +14,28 @@ namespace PL.Controllers
         public ActionResult GetAll()
         {
             ML.Libro libro = new ML.Libro();
+            libro.Autor = new ML.Autor();
+            libro.Editorial = new ML.Editorial();
+
+            var resultAutores = ApiAutorGetAll();
+            if (resultAutores.Correct)
+            {
+                libro.Autor.Autores = resultAutores.Objects;
+            }
+            else
+            {
+                libro.Autor.Autores = new List<object>();
+            }
+            var resultEditoriales = ApiEditorialGetAll();
+            if (resultEditoriales.Correct)
+            {
+                libro.Editorial.Editoriales = resultEditoriales.Objects;
+            }
+            else
+            {
+                libro.Editorial.Editoriales = new List<object>();
+            }
+
             var result = ApiGetAll();
             if (result.Correct)
             {
@@ -23,6 +45,39 @@ namespace PL.Controllers
             {
                 libro.Libros = new List<object>();
 
+            }
+            return View(libro);
+        }
+        [HttpPost]
+        public ActionResult GetAll(ML.Libro libro)
+        {
+            libro.Titulo = libro.Titulo == null ? "" : libro.Titulo;
+            var resultAutores = ApiAutorGetAll();
+            if (resultAutores.Correct)
+            {
+                libro.Autor.Autores = resultAutores.Objects;
+            }
+            else
+            {
+                libro.Autor.Autores = new List<object>();
+            }
+            var resultEditoriales = ApiEditorialGetAll();
+            if (resultEditoriales.Correct)
+            {
+                libro.Editorial.Editoriales = resultEditoriales.Objects;
+            }
+            else
+            {
+                libro.Editorial.Editoriales = new List<object>();
+            }
+            var result = ApiGetAll(libro);
+            if (result.Correct)
+            {
+                libro.Libros = result.Objects;
+            }
+            else
+            {
+                libro.Libros = new List<object>();
             }
             return View(libro);
         }
@@ -132,7 +187,7 @@ namespace PL.Controllers
                         }
                     };
 
-                    string queryString = $"?Titulo={libroBusqueda.Titulo}&AñoPublicacion={libroBusqueda.AñoPublicacion}&IdAutor={libroBusqueda.Autor.IdAutor}&IdEditorial={libroBusqueda.Editorial.IdEditorial}";
+                    string queryString = $"?Titulo={libroBusqueda.Titulo}&AñoPublicacion={libroBusqueda.AñoPublicacion}&Autor.IdAutor={libroBusqueda.Autor.IdAutor}&Editorial.IdEditorial={libroBusqueda.Editorial.IdEditorial}";
 
                     var responseTask = client.GetAsync(queryString);
                     responseTask.Wait();

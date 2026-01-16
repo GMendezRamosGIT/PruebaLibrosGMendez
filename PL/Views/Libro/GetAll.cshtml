@@ -12,6 +12,42 @@
             <div class="col-2">
                 <a href="@Url.Action("Form", "Libro")" class="btn btn-primary">Nuevo libro</a>
             </div>
+            <div class="col-2">
+                <button type="button" class="btn btn-info" id="btnBuscar" onclick="AbrirFormBusqueda()">Buscar</button>
+            </div>
+            <div id="formBusqueda" style="display : none;">
+                @using (Html.BeginForm("GetAll", "Libro", FormMethod.Post))
+                {
+                    <div class="container">
+                        <div class="row">
+                            <div class="col">
+                                @Html.LabelFor(model => model.Titulo, "Titulo", new { @class = "form-label" })
+                                @Html.TextBoxFor(model => model.Titulo, new { @class = "form-control" })
+                            </div>
+                            <div class="col">
+                                @Html.LabelFor(model => model.AñoPublicacion, "Año de publicacion", new { @class = "form-label" })
+                                @Html.TextBoxFor(model => model.AñoPublicacion, new { @class = "form-control" })
+                            </div>
+                            <div class="col">
+                                @Html.LabelFor(model => model.Autor.IdAutor, "Autor", new { @class = "form-label" })
+                                @Html.DropDownListFor(model => model.Autor.IdAutor, new SelectList(Model.Autor.Autores, "IdAutor", "Nombre"), "Seleccione un autor", new { @class = "form-select" })
+                            </div>
+                            <div class="col">
+                                @Html.LabelFor(model => model.Editorial.IdEditorial, "Editorial", new { @class = "form-label" })
+                                @Html.DropDownListFor(model => model.Editorial.IdEditorial, new SelectList(Model.Editorial.Editoriales, "IdEditorial", "Nombre"), "Seleccione una editorial", new { @class = "form-select" })
+                            </div>
+                            <div>
+                                <label>
+
+                                </label>
+                            </div>
+                            <div class="row-cols-5">
+                                <button type="submit" class="btn btn-primary">Buscar</button>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
             <div>
                 <label>
 
@@ -52,3 +88,11 @@
         </div>
     </div>
 </body>
+
+<script src="~/Scripts/jquery-3.7.0.js"></script>
+<script>
+    function AbrirFormBusqueda() {
+        var form = $('#formBusqueda');
+        form.toggle();
+    }
+</script>

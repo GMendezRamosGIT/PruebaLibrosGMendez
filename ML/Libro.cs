@@ -16,7 +16,7 @@ namespace ML
         public ML.Autor Autor { get; set; }
         [Required(ErrorMessage = "El campo 'Año de Publicación' es obligatorio")]
         [Range(1450, 2100, ErrorMessage = "El año de publicación debe estar entre 1450 y el año actual")]
-        public int AñoPublicacion { get; set; }
+        public int? AñoPublicacion { get; set; }
         public ML.Editorial Editorial { get; set; }
         public List<object> Libros { get; set; }
     }

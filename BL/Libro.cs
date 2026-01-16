@@ -11,10 +11,9 @@ namespace BL
         public static ML.Result GetAll(ML.Libro libroBusqueda)
         {
             ML.Result result = new ML.Result();
-            libroBusqueda.Autor = new ML.Autor();
-            libroBusqueda.Editorial = new ML.Editorial();
             try
             {
+                libroBusqueda.Titulo = libroBusqueda.Titulo ?? string.Empty;
                 using (DL.PruebaLibrosEntities context = new DL.PruebaLibrosEntities())
                 {
                     var registros = context.LibroGetAll(libroBusqueda.Autor.IdAutor, libroBusqueda.Editorial.IdEditorial, libroBusqueda.Titulo, libroBusqueda.AñoPublicacion).ToList();
