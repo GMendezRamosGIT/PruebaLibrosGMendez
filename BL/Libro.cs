@@ -116,5 +116,33 @@ namespace BL
             }
             return result;
         }
+        public static ML.Result DeleteLibroByAutor(int IdAutor)
+        {
+            ML.Result result = new ML.Result();
+            try
+            {
+                using (DL.PruebaLibrosEntities context = new DL.PruebaLibrosEntities())
+                {
+                    var filasAfectadas = context.LibroDeleteByAutor(IdAutor);
+
+                    if (filasAfectadas > 0)
+                    {
+                        result.Correct = true;
+                    }
+                    else
+                    {
+                        result.Correct = false;
+                        result.ErrorMessage = "No se pudo eliminar los libros del autor.";
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                result.Correct = false;
+                result.ErrorMessage = ex.Message;
+                result.Ex = ex;
+            }
+            return result;
+        }
     }
 }

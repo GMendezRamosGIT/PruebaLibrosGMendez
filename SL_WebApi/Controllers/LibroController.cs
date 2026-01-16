@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using System.Web.Http.Controllers;
 
 namespace SL_WebApi.Controllers
 {
@@ -44,6 +45,20 @@ namespace SL_WebApi.Controllers
         public IHttpActionResult Add([FromBody] ML.Libro libro)
         {
             ML.Result result = BL.Libro.Add(libro);
+            if (result.Correct)
+            {
+                return Ok(result);
+            }
+            else
+            {
+                return Content(HttpStatusCode.BadRequest, result.ErrorMessage);
+            }
+        }
+        [HttpDelete]
+        [Route("DeleteLibroByIdAutor/{IdAutor}")]
+        public IHttpActionResult DeleteLibroByIdAutor(int IdAutor)
+        {
+            ML.Result result = BL.Libro.DeleteLibroByAutor(IdAutor);
             if (result.Correct)
             {
                 return Ok(result);
