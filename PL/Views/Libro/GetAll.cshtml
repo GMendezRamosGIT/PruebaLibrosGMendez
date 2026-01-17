@@ -49,9 +49,35 @@
                 }
             </div>
             <div>
-                <label>
+                <div class="col-2">
+                    <button type="button" class="btn btn-danger" id="btnEliminar" onclick="AbrirFormEliminar()">Eliminar libros por autor</button>
+                </div>
+                <div id="formEliminarPorAutor" style="display : none;">
+                    @using (Html.BeginForm("DeleteByIdAutor", "Libro", FormMethod.Post))
+                    {
+                        <div class="container">
+                            <div class="row">
+                                <div class="col">
+                                    @Html.LabelFor(model => model.Autor.IdAutor, "Autor", new { @class = "form-label" })
+                                    @Html.DropDownListFor(model => model.Autor.IdAutor, new SelectList(Model.Autor.Autores, "IdAutor", "Nombre"), "Seleccione un autor", new { @class = "form-select" })
+                                </div>
+                                <div>
+                                    <label>
 
-                </label>
+                                    </label>
+                                </div>
+                                <div class="row-cols-5">
+                                    <button type="submit" class="btn btn-danger" onclick="return confirm('¿Estas seguro que deseas eliminar los libros del autor?');">Eliminar</button>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+                <div>
+                    <label>
+
+                    </label>
+                </div>
             </div>
             <div class="table-responsive col-12">
                 @if (Model.Libros.Count > 0)
@@ -93,6 +119,10 @@
 <script>
     function AbrirFormBusqueda() {
         var form = $('#formBusqueda');
+        form.toggle();
+    }
+    function AbrirFormEliminar() {
+        var form = $('#formEliminarPorAutor');
         form.toggle();
     }
 </script>

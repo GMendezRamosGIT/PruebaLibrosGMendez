@@ -162,6 +162,21 @@ namespace PL.Controllers
                 return View(libro);
             }
         }
+        [HttpPost]
+        public ActionResult DeleteByIdAutor(ML.Libro libro)
+        {
+            int IdAutor = libro.Autor.IdAutor;
+            var result = ApiLibroDeleteByIdAutor(IdAutor);
+            if (result.Correct)
+            {
+                ViewBag.Message = "Los libros del autor se han eliminado correctamente.";
+            }
+            else
+            {
+                ViewBag.Message = "Ocurrió un error al eliminar los libros del autor." + result.ErrorMessage;
+            }
+            return PartialView("_Modal");
+        }
         [NonAction]
         private ML.Result ApiGetAll(ML.Libro libroBusqueda = null)
         {
@@ -320,6 +335,38 @@ namespace PL.Controllers
                     {
                         result.Correct = false;
                         result.ErrorMessage = "No se encontraron registros de editoriales.";
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                result.Correct = false;
+                result.ErrorMessage = ex.Message;
+                result.Ex = ex;
+            }
+            return result;
+        }
+        [NonAction]
+        private ML.Result ApiLibroDeleteByIdAutor(int IdAutor)
+        {
+            ML.Result result = new ML.Result();
+            try
+            {
+                using (var client = new HttpClient())
+                {
+                    string endpoint = ConfigurationManager.AppSettings["ApiLibroDeleteByIdAutor"];
+                    client.BaseAddress = new Uri(endpoint);
+                    var responseTask = client.DeleteAsync(IdAutor.ToString());
+                    responseTask.Wait();
+                    var resultApi = responseTask.Result;
+                    if (resultApi.IsSuccessStatusCode)
+                    {
+                        result.Correct = true;
+                    }
+                    else
+                    {
+                        result.Correct = false;
+                        result.ErrorMessage = "No se pudo eliminar los libros del autor.";
                     }
                 }
             }
