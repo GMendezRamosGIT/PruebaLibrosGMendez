@@ -177,6 +177,21 @@ namespace PL.Controllers
             }
             return PartialView("_Modal");
         }
+        [HttpPost]
+        public ActionResult DeleteByIdEditorial(ML.Libro libro)
+        {
+            int IdEditorial = libro.Editorial.IdEditorial;
+            var result = ApiLibroDeleteByIdEditorial(IdEditorial);
+            if (result.Correct)
+            {
+                ViewBag.Message = "Los libros de la editorial se han eliminado correctamente.";
+            }
+            else
+            {
+                ViewBag.Message = "Ocurrió un error al eliminar los libros de la editorial." + result.ErrorMessage;
+            }
+            return PartialView("_Modal");
+        }
         [NonAction]
         private ML.Result ApiGetAll(ML.Libro libroBusqueda = null)
         {
@@ -367,6 +382,38 @@ namespace PL.Controllers
                     {
                         result.Correct = false;
                         result.ErrorMessage = "No se pudo eliminar los libros del autor.";
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                result.Correct = false;
+                result.ErrorMessage = ex.Message;
+                result.Ex = ex;
+            }
+            return result;
+        }
+        [NonAction]
+        private ML.Result ApiLibroDeleteByIdEditorial(int IdEditorial)
+        {
+            ML.Result result = new ML.Result();
+            try
+            {
+                using (var client = new HttpClient())
+                {
+                    string endpoint = ConfigurationManager.AppSettings["ApiLibroDeleteByIdEditorial"];
+                    client.BaseAddress = new Uri(endpoint);
+                    var responseTask = client.DeleteAsync(IdEditorial.ToString());
+                    responseTask.Wait();
+                    var resultApi = responseTask.Result;
+                    if (resultApi.IsSuccessStatusCode)
+                    {
+                        result.Correct = true;
+                    }
+                    else
+                    {
+                        result.Correct = false;
+                        result.ErrorMessage = "No se pudo eliminar los libros de la editorial.";
                     }
                 }
             }

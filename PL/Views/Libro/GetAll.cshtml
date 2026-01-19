@@ -15,43 +15,47 @@
             <div class="col-2">
                 <button type="button" class="btn btn-info" id="btnBuscar" onclick="AbrirFormBusqueda()">Buscar</button>
             </div>
-            <div id="formBusqueda" style="display : none;">
-                @using (Html.BeginForm("GetAll", "Libro", FormMethod.Post))
-                {
-                    <div class="container">
-                        <div class="row">
-                            <div class="col">
-                                @Html.LabelFor(model => model.Titulo, "Titulo", new { @class = "form-label" })
-                                @Html.TextBoxFor(model => model.Titulo, new { @class = "form-control" })
-                            </div>
-                            <div class="col">
-                                @Html.LabelFor(model => model.AñoPublicacion, "Año de publicacion", new { @class = "form-label" })
-                                @Html.TextBoxFor(model => model.AñoPublicacion, new { @class = "form-control" })
-                            </div>
-                            <div class="col">
-                                @Html.LabelFor(model => model.Autor.IdAutor, "Autor", new { @class = "form-label" })
-                                @Html.DropDownListFor(model => model.Autor.IdAutor, new SelectList(Model.Autor.Autores, "IdAutor", "Nombre"), "Seleccione un autor", new { @class = "form-select" })
-                            </div>
-                            <div class="col">
-                                @Html.LabelFor(model => model.Editorial.IdEditorial, "Editorial", new { @class = "form-label" })
-                                @Html.DropDownListFor(model => model.Editorial.IdEditorial, new SelectList(Model.Editorial.Editoriales, "IdEditorial", "Nombre"), "Seleccione una editorial", new { @class = "form-select" })
-                            </div>
-                            <div>
-                                <label>
-
-                                </label>
-                            </div>
-                            <div class="row-cols-5">
-                                <button type="submit" class="btn btn-primary">Buscar</button>
-                            </div>
-                        </div>
-                    </div>
-                }
+            <div class="col-2">
+                <button type="button" class="btn btn-danger" id="btnEliminar" onclick="AbrirFormEliminar()">Eliminar por autor</button>
+            </div>
+            <div class="col-3">
+                <button type="button" class="btn btn-danger" id="btnEliminarPorEditorial" onclick="AbrirFormEliminarPorEditorial()">Eliminar por editorial</button>
             </div>
             <div>
-                <div class="col-2">
-                    <button type="button" class="btn btn-danger" id="btnEliminar" onclick="AbrirFormEliminar()">Eliminar libros por autor</button>
+                <div id="formBusqueda" style="display : none;">
+                    @using (Html.BeginForm("GetAll", "Libro", FormMethod.Post))
+                    {
+                        <div class="container">
+                            <div class="row">
+                                <div class="col">
+                                    @Html.LabelFor(model => model.Titulo, "Titulo", new { @class = "form-label" })
+                                    @Html.TextBoxFor(model => model.Titulo, new { @class = "form-control" })
+                                </div>
+                                <div class="col">
+                                    @Html.LabelFor(model => model.AñoPublicacion, "Año de publicacion", new { @class = "form-label" })
+                                    @Html.TextBoxFor(model => model.AñoPublicacion, new { @class = "form-control" })
+                                </div>
+                                <div class="col">
+                                    @Html.LabelFor(model => model.Autor.IdAutor, "Autor", new { @class = "form-label" })
+                                    @Html.DropDownListFor(model => model.Autor.IdAutor, new SelectList(Model.Autor.Autores, "IdAutor", "Nombre"), "Seleccione un autor", new { @class = "form-select" })
+                                </div>
+                                <div class="col">
+                                    @Html.LabelFor(model => model.Editorial.IdEditorial, "Editorial", new { @class = "form-label" })
+                                    @Html.DropDownListFor(model => model.Editorial.IdEditorial, new SelectList(Model.Editorial.Editoriales, "IdEditorial", "Nombre"), "Seleccione una editorial", new { @class = "form-select" })
+                                </div>
+                                <div>
+                                    <label>
+
+                                    </label>
+                                </div>
+                                <div class="row-cols-5">
+                                    <button type="submit" class="btn btn-primary">Buscar</button>
+                                </div>
+                            </div>
+                        </div>
+                    }
                 </div>
+
                 <div id="formEliminarPorAutor" style="display : none;">
                     @using (Html.BeginForm("DeleteByIdAutor", "Libro", FormMethod.Post))
                     {
@@ -68,6 +72,28 @@
                                 </div>
                                 <div class="row-cols-5">
                                     <button type="submit" class="btn btn-danger" onclick="return confirm('¿Estas seguro que deseas eliminar los libros del autor?');">Eliminar</button>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+
+                <div id="formEliminarPorEditorial" style="display : none;">
+                    @using (Html.BeginForm("DeleteByIdEditorial", "Libro", FormMethod.Post))
+                    {
+                        <div class="container">
+                            <div class="row">
+                                <div class="col">
+                                    @Html.LabelFor(model => model.Editorial.IdEditorial, "Editorial", new { @class = "form-label" })
+                                    @Html.DropDownListFor(model => model.Editorial.IdEditorial, new SelectList(Model.Editorial.Editoriales, "IdEditorial", "Nombre"), "Seleccione una editorial", new { @class = "form-select" })
+                                </div>
+                                <div>
+                                    <label>
+
+                                    </label>
+                                </div>
+                                <div class="row-cols-5">
+                                    <button type="submit" class="btn btn-danger" onclick="return confirm('¿Estas seguro que deseas eliminar los libros de la editorial?');">Eliminar</button>
                                 </div>
                             </div>
                         </div>
@@ -120,9 +146,20 @@
     function AbrirFormBusqueda() {
         var form = $('#formBusqueda');
         form.toggle();
+        $('#formEliminarPorAutor').hide();
+        $('#formEliminarPorEditorial').hide();
+
     }
     function AbrirFormEliminar() {
         var form = $('#formEliminarPorAutor');
         form.toggle();
+        $('#formBusqueda').hide();
+        $('#formEliminarPorEditorial').hide();
+    }
+    function AbrirFormEliminarPorEditorial() {
+        var form = $('#formEliminarPorEditorial');
+        form.toggle();
+        $('#formBusqueda').hide();
+        $('#formEliminarPorAutor').hide();
     }
 </script>
